@@ -13,7 +13,7 @@ const selectors = {
 
 selectors.buttonStart.disabled = true;
 selectors.buttonStart.addEventListener('click', startTimer)
-let timerId = null;
+
 
 const options = {
     enableTime: true,
@@ -22,9 +22,8 @@ const options = {
     minuteIncrement: 1,
      onClose(selectedDates) {
        if (selectedDates[0] <= new Date()) {
-         Notiflix.Notify.success('Please choose a date in the future');
+         Notiflix.Notify.failure('Please choose a date in the future');
        } else {
-        Notiflix.Notify.success('The date is selected');
         selectors.buttonStart.disabled = false;
        }
     }
@@ -37,7 +36,9 @@ const currentTime = new Date();
 
 
 function startTimer() {
- let futureTime = new Date(selectors.time.value);
+  selectors.buttonStart.disabled = true;
+  selectors.input.disabled = true;
+  let futureTime = new Date(selectors.input.value);
   let targetTime = futureTime - currentTime;
 
  const selectedDate = setInterval(() => {
@@ -49,7 +50,9 @@ function startTimer() {
     targetTime -= 1000;
     
    if (targetTime <= 0) {
-    clearInterval(selectedDate);
+     clearInterval(selectedDate);
+     selectors.buttonStart.disabled = false;
+     selectors.input.disabled = false;
   }
  }, 1000)
 }
